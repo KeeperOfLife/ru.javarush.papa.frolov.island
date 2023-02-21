@@ -11,7 +11,6 @@ public class OrganismStats {
     public OrganismStats() {
 
     }
-
     public OrganismStats(String name, String icon, double weight, int maxQuantity, int maxSpeed, float maxFoodRequired) {
         this.name = name;
         this.icon = icon;

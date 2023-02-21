@@ -1,54 +1,52 @@
 package settings;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import entity.organism.Organism;
 import entity.organism.OrganismStats;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Settings {
 
-    private static final String SETTINGS_PATH = "settings.json";
-
+    private static final String SETTINGS_PATH = "resources/settings.json";
     private static volatile Settings SETTINGS;
-
 
     private int islandOsX;
     private int islandOsY;
 
-    private int cycleDuration;
-    private int gameDuration;
+    private int cycleDuration;  // millis
+    private int gameDuration;   // millis
 
     private Map<String, Integer> organismInitialQuantity;
     private Map<String, Integer> organismChildQuantity;
     private Map<String, Map<String, Integer>> chanceToGetFood;
-    private Map<String, OrganismStats> organismStats;
+    private Map<String, OrganismStats> organismsStats;
 
     private List<String> organismsTypes;
 
-    private Settings() throws IOException {
-        URL resource = Settings.class.getClassLoader().getResource(SETTINGS_PATH);
-        ObjectReader objectReader = new JsonMapper().readerForUpdating(this);
-        if (Objects.nonNull(resource)) {
-            objectReader.readValue(resource.openStream());
-        }
 
-        organismsTypes = new ArrayList<>(organismStats.keySet());
+    private Settings() {
+        try {
+            URL resource = Settings.class.getClassLoader().getResource(SETTINGS_PATH);
+            ObjectReader objectReader = new JsonMapper().readerForUpdating(this);
+            if (Objects.nonNull(resource)) {
+                objectReader.readValue(resource.openStream());
+            }
+            organismsTypes = new ArrayList<>(organismsStats.keySet());
+        } catch (IOException e) {
+            System.out.println("file \"settings.json\" was not found");
+        }
     }
 
-    public static Settings get() throws IOException {
+    public static Settings get() {
         Settings settings = SETTINGS;
         if (Objects.isNull(settings)) {
             synchronized (Settings.class) {
                 if (Objects.isNull(settings = SETTINGS)) {
-                    SETTINGS = new Settings();
-                    settings = SETTINGS;
+                    settings = SETTINGS = new Settings();
                 }
             }
         }
@@ -83,8 +81,12 @@ public class Settings {
         return chanceToGetFood;
     }
 
-    public Map<String, OrganismStats> getOrganismStats() {
-        return organismStats;
+    public Map<String, OrganismStats> getOrganismsStats() {
+        return organismsStats;
+    }
+
+    public OrganismStats getOrganismStatsByType(String organismType) {
+        return organismsStats.get(organismType);
     }
 
     public List<String> getOrganismsTypes() {

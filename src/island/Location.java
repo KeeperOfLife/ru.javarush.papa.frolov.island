@@ -1,9 +1,11 @@
 package island;
 
 
-
 import entity.organism.Organism;
+import entity.organism.OrganismStats;
+import settings.Settings;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,9 +13,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Location {
-   private Map<String, Set<Organism>> inhabitants;
-   private List<Location> neighboringLocations;
-   private final Lock lock = new ReentrantLock(true);
+    private Map<String, Set<Organism>> inhabitants;
+    private List<Location> neighboringLocations;
+    private final Lock lock = new ReentrantLock(true);
 
     public Map<String, Set<Organism>> getInhabitants() {
         return inhabitants;
@@ -37,8 +39,21 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location{" +
-                "inhabitants=" + inhabitants +
-                '}';
+        HashMap<String, Long> locationStatistics = new HashMap<>();
+
+        inhabitants.entrySet()
+
+                .forEach(entry -> {
+                    OrganismStats organismStats = Settings.get().getOrganismStatsByType(entry.getKey());
+                    String icon = organismStats.getIcon();
+                    long count = entry.getValue().size();
+                    locationStatistics.put(icon, count);
+                });
+
+        return locationStatistics.toString();
+    }
+
+    public void addInhabitant(String organismType, Organism newOrganism) {
+        inhabitants.get(organismType).add(newOrganism);
     }
 }
