@@ -9,7 +9,6 @@ public abstract class Organism {
 
     private final String type = this.getClass().getSimpleName().toLowerCase();
     private String gender;
-
     private double weight;
 
     public abstract void multiply(Location location);
