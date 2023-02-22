@@ -5,10 +5,10 @@
 ###    13
 
 # Settings:
-### path to the settings file: _src/resources/settings.json_
+### path to the ru.javarush.papa.frolov.island.settings file: _resources/settings.json_
 
 # Libraries:
-### Path to libraries: _src/resources/libraries_
+### Path to libraries: _resources/libraries_
 ### Libraries used:
 * jackson-annotations-2.14.0.jar
 * jackson-core-2.14.0.jar
@@ -23,4 +23,4 @@
 ### In development
 
 # Description:
-### Simulation of an island with animals, where they live a full and eventful life :)
+### Simulation of an ru.javarush.papa.frolov.island.island with animals, where they live a full and eventful life :)
